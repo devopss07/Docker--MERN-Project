@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./mern/backend
+    ports:
+      - "5050:5050"
+    networks:
+      - mern_network
+    environment:
+      - MONGO_URI=${MONGO_URI}
+    
+
+  frontend:
+    build: ./mern/frontend
+    ports:
+      - "5173:5173"
+    networks:
+      - mern_network
+    environment:
+      # USE THE VARIABLE HERE:
+      - VITE_API_URL=http://${PUBLIC_IP}:5050
+    depends_on:
+      - backend
+
+networks:
+  mern_network:
+    driver: bridge
